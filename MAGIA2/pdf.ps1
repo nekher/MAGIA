@@ -213,5 +213,8 @@ $btnSalir.Location = New-Object System.Drawing.Point(200, 260)
 $btnSalir.Add_Click({ $form.Close() })
 $form.Controls.Add($btnSalir)
 
+
+
+
 # Mostrar la ventana principal
 $form.ShowDialog()

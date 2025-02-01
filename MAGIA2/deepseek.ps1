@@ -44,7 +44,7 @@ function Optimizar-PC {
     schtasks.exe /Change /DISABLE /TN "\Microsoft\Windows\Defrag\ScheduledDefrag"
     Start-Process "$env:windir\system32\SystemPropertiesPerformance.exe"
     Start-Process "msconfig"
-    [System.Windows.Forms.MessageBox]::Show("Optimización completada")
+    [System.Windows.Forms.MessageBox]::Show("Optimización al mango. Decime...no merezco un cafecito?")
 }
 
 # Función para mostrar las explicaciones
@@ -69,7 +69,7 @@ function Mostrar-Explicaciones {
 
     $imageForm = New-Object System.Windows.Forms.Form
     $imageForm.Text = "Explicacion sobre lo que hay que hacer"
-    $imageForm.Size = New-Object System.Drawing.Size(600,800)
+    $imageForm.Size = New-Object System.Drawing.Size(600,1280)
 
     $pictureBox = New-Object System.Windows.Forms.PictureBox
     $pictureBox.Image = [System.Drawing.Image]::FromFile("c:\repos\magia\magia2\pdf.jpg")
@@ -78,122 +78,101 @@ function Mostrar-Explicaciones {
     $imageForm.Controls.Add($pictureBox)
 
     $imageForm.StartPosition = "Manual"
-    $imageForm.Location = New-Object System.Drawing.Point(1000, 200)
+    $imageForm.Location = New-Object System.Drawing.Point(590, 0)
     $imageForm.Show()
 }
 
 # Función para confirmar antes de ejecutar la optimización
 function Confirmar-Accion {
-    $btnOptimizar.Visible = $false
-    $btnExplicaciones.Visible = $false
-    $btnAgradecimientos.Visible = $false
-    $btnSalir.Visible = $false
+    # Crear nueva ventana para la confirmación
+    $formConfirmacion = New-Object System.Windows.Forms.Form
+    $formConfirmacion.Text = "Confirmación de Acción"
+    $formConfirmacion.Size = New-Object System.Drawing.Size(500, 300)
+    $formConfirmacion.StartPosition = 'CenterScreen'
 
+    # Etiqueta de confirmación
     $labelConfirmacion = New-Object System.Windows.Forms.Label
     $labelConfirmacion.Text = "¿ESTÁS SEGURO DE LO QUE VAS A HACER? Vas a modificar lo siguiente:`r`n10 campos a editar"
-    $labelConfirmacion.Size = New-Object System.Drawing.Size(300, 50)
-    $labelConfirmacion.Location = New-Object System.Drawing.Point(150, 150)
-    $form.Controls.Add($labelConfirmacion)
+    $labelConfirmacion.Size = New-Object System.Drawing.Size(400, 50)
+    $labelConfirmacion.Location = New-Object System.Drawing.Point(50, 50)
+    $formConfirmacion.Controls.Add($labelConfirmacion)
 
+    # Botón NO
     $btnNo = New-Object System.Windows.Forms.Button
     $btnNo.Text = "NO, me dio miedo y me arrepentí"
     $btnNo.Size = New-Object System.Drawing.Size(200, 50)
-    $btnNo.Location = New-Object System.Drawing.Point(50, 230)
+    $btnNo.Location = New-Object System.Drawing.Point(50, 120)
     $btnNo.BackColor = [System.Drawing.Color]::LightPink
     $btnNo.Add_Click({
-        Limpiar-Pantalla
         $btnOptimizar.Visible = $true
         $btnExplicaciones.Visible = $true
-        $btnAgradecimientos.Visible = $true
         $btnSalir.Visible = $true
+        $formConfirmacion.Close()  # Cerrar ventana de confirmación
     })
-    $form.Controls.Add($btnNo)
+    $formConfirmacion.Controls.Add($btnNo)
 
+    # Botón SI
     $btnSi = New-Object System.Windows.Forms.Button
     $btnSi.Text = "SI, le voy a dar murra"
     $btnSi.Size = New-Object System.Drawing.Size(200, 50)
-    $btnSi.Location = New-Object System.Drawing.Point(250, 230)
+    $btnSi.Location = New-Object System.Drawing.Point(250, 120)
     $btnSi.BackColor = [System.Drawing.Color]::LightGreen
     $btnSi.Add_Click({
         Optimizar-PC
-        Limpiar-Pantalla
         $mensajeOpt = New-Object System.Windows.Forms.Label
-        $mensajeOpt.Text = "Optimización completada con éxito"
+        $mensajeOpt.Text = "LISSTO ahora pensa seriamente si no merezco un cafecito...."
         $mensajeOpt.Size = New-Object System.Drawing.Size(300, 50)
         $mensajeOpt.Location = New-Object System.Drawing.Point(150, 150)
         $form.Controls.Add($mensajeOpt)
 
         Start-Sleep -Seconds 2
-        Limpiar-Pantalla
         $btnOptimizar.Visible = $true
         $btnExplicaciones.Visible = $true
-        $btnAgradecimientos.Visible = $true
         $btnSalir.Visible = $true
+        $formConfirmacion.Close()  # Cerrar ventana de confirmación
     })
-    $form.Controls.Add($btnSi)
-}
+    $formConfirmacion.Controls.Add($btnSi)
 
-# Función para limpiar la pantalla
-function Limpiar-Pantalla {
-    $form.Controls.Clear()
+    # Mostrar la ventana de confirmación
+    $formConfirmacion.ShowDialog()
 }
 
 # Botones principales con colores diferentes
-$btnOptimizar = New-Object System.Windows.Forms.Button
-$btnOptimizar.Text = "Hacer que la PC funcione bien"
-$btnOptimizar.Size = New-Object System.Drawing.Size(200, 50)
-$btnOptimizar.Location = New-Object System.Drawing.Point(200, 50)
-$btnOptimizar.BackColor = [System.Drawing.Color]::LightGreen
-$btnOptimizar.Add_Click({ Confirmar-Accion })
-$form.Controls.Add($btnOptimizar)
 
 $btnExplicaciones = New-Object System.Windows.Forms.Button
 $btnExplicaciones.Text = "Explicaciones"
+$btnExplicaciones.FlatStyle = 'Flat'
 $btnExplicaciones.Size = New-Object System.Drawing.Size(200, 50)
-$btnExplicaciones.Location = New-Object System.Drawing.Point(200, 120)
-$btnExplicaciones.BackColor = [System.Drawing.Color]::LightCoral
+$btnExplicaciones.Location = New-Object System.Drawing.Point(380, 50)
+$btnExplicaciones.BackColor = [System.Drawing.Color]::Gold
 $btnExplicaciones.Add_Click({ Mostrar-Explicaciones })
 $form.Controls.Add($btnExplicaciones)
 
-$btnAgradecimientos = New-Object System.Windows.Forms.Button
-$btnAgradecimientos.Text = "Agradecimientos"
-$btnAgradecimientos.Size = New-Object System.Drawing.Size(200, 50)
-$btnAgradecimientos.Location = New-Object System.Drawing.Point(200, 190)
-$btnAgradecimientos.BackColor = [System.Drawing.Color]::LightGoldenrodYellow
-$btnAgradecimientos.Add_Click({
-    $form.Controls.Clear()
-    $pictureBox = New-Object System.Windows.Forms.PictureBox
-    $pictureBox.Image = [System.Drawing.Image]::FromFile("c:\repos\magia\magia2\ironman.jpg")
-    $pictureBox.SizeMode = "StretchImage"
-    $pictureBox.Dock = "Top"
-    $pictureBox.Size = New-Object System.Drawing.Size(1200, 400)
-    $form.ClientSize = New-Object System.Drawing.Size($pictureBox.Width, $pictureBox.Height)
-    $form.Controls.Add($pictureBox)
-    
-    Start-Sleep -Seconds 5
-    $form.Controls.Clear()
-    $form.Controls.Add($btnOptimizar)
-    $form.Controls.Add($btnExplicaciones)
-    $form.Controls.Add($btnAgradecimientos)
-    $form.Controls.Add($btnSalir)
-})
-$form.Controls.Add($btnAgradecimientos)
-
-
+$btnOptimizar = New-Object System.Windows.Forms.Button
+$btnOptimizar.Text = "Hacer que la PC funcione bien"
+$btnOptimizar.FlatStyle = 'Flat'
+$btnOptimizar.Size = New-Object System.Drawing.Size(200, 50)
+$btnOptimizar.Location = New-Object System.Drawing.Point(380, 120)
+$btnOptimizar.BackColor = [System.Drawing.Color]::Orange
+$btnOptimizar.Add_Click({ Confirmar-Accion })
+$form.Controls.Add($btnOptimizar)
 
 $btnSalir = New-Object System.Windows.Forms.Button
 $btnSalir.Text = "Salir"
 $btnSalir.Size = New-Object System.Drawing.Size(200, 50)
 $btnSalir.FlatStyle = 'Flat'
-$btnSalir.Location = New-Object System.Drawing.Point(200, 260)
-$btnSalir.BackColor = [System.Drawing.Color]::LightGray
-$btnSalir.ForeColor = [System.Drawing.Color]::Black
+$btnSalir.Location = New-Object System.Drawing.Point(380, 190)
+$btnSalir.BackColor = [System.Drawing.Color]::Firebrick
 $btnSalir.Add_Click({ $form.Close() })
 $form.Controls.Add($btnSalir)
 
 
-
-
+# Agregar los botones después del fondo para que queden encima
+$form.Controls.Add($btnExplicaciones)
+$form.Controls.Add($btnOptimizar)
+$form.Controls.Add($btnSalir)
+$form.Controls.Add($btnNo)
+$form.Controls.Add($btnSi)
 
 
 # Agregar un PictureBox para mostrar la imagen de fondo
