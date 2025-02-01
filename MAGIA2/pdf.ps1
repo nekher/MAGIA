@@ -77,53 +77,6 @@ function Mostrar-Explicaciones {
     $imageForm.Show()
 }
 
-# Función para mostrar agradecimientos
-function Mostrar-Agradecimientos {
-    $thankForm = New-Object System.Windows.Forms.Form
-    $thankForm.Text = "Agradecimientos"
-    $thankForm.Size = New-Object System.Drawing.Size(1200,400)
-
-    # Lugar para la imagen de agradecimiento
-    $pictureBox = New-Object System.Windows.Forms.PictureBox
-    $pictureBox.Image = [System.Drawing.Image]::FromFile("c:\repos\magia\magia2\nerdry.gif")
-    $pictureBox.SizeMode = "StretchImage"
-    $pictureBox.Dock = "Top"
-    $thankForm.Controls.Add($pictureBox)
-
-    # Texto de agradecimiento
-    $label = New-Object System.Windows.Forms.Label
-    $label.Text = "¡Gracias por usar el programa!"
-    $label.Dock = "Top"
-    $thankForm.Controls.Add($label)
-
-    # Crear panel para organizar los botones en la parte inferior
-    $panelBotones = New-Object System.Windows.Forms.Panel
-    $panelBotones.Dock = "Bottom"
-    $panelBotones.Height = 50
-    $thankForm.Controls.Add($panelBotones)
-
-    # Botón para volver al menú
-    $btnMenu = New-Object System.Windows.Forms.Button
-    $btnMenu.Text = "Volver al Menú"
-    $btnMenu.Size = New-Object System.Drawing.Size(100, 40)
-    $btnMenu.Location = New-Object System.Drawing.Point(100, 5)
-    $btnMenu.Add_Click({ $thankForm.Close() })
-    $panelBotones.Controls.Add($btnMenu)
-
-    # Botón para salir del programa
-    $btnSalir = New-Object System.Windows.Forms.Button
-    $btnSalir.Text = "Salir"
-    $btnSalir.Size = New-Object System.Drawing.Size(100, 40)
-    $btnSalir.Location = New-Object System.Drawing.Point(400, 5)
-    $btnSalir.Add_Click({
-        $thankForm.Close()
-        $form.Close()
-    })
-    $panelBotones.Controls.Add($btnSalir)
-
-    $thankForm.ShowDialog()
-}
-
 # Función para confirmar antes de ejecutar la optimización
 function Confirmar-Accion {
     # Ocultar los botones del menú
