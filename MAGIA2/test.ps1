@@ -41,9 +41,12 @@ function Optimizar-PC {
     Set-Service -Name 'DiagTrack' -StartupType Disabled
     Set-Service -Name 'CDPSvc' -StartupType Disabled
     Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name 'AllowCortana' -Value 0
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name 'ConnectedSearchUseWeb' -Value 0
     schtasks.exe /Change /DISABLE /TN "\Microsoft\Windows\Defrag\ScheduledDefrag"
+    Start-Process "devmgmt.msc"
     Start-Process "$env:windir\system32\SystemPropertiesPerformance.exe"
     Start-Process "msconfig"
+    
     [System.Windows.Forms.MessageBox]::Show("Optimización al mango. Decime...no merezco un cafecito?")
 }
 
