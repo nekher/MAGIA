@@ -43,8 +43,14 @@ function Optimizar-PC {
     Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name 'AllowCortana' -Value 0
     Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name 'ConnectedSearchUseWeb' -Value 0
     schtasks.exe /Change /DISABLE /TN "\Microsoft\Windows\Defrag\ScheduledDefrag"
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Value $performanceOptions["VisualFXSetting"]
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -Value $performanceOptions["UserPreferencesMask"]
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "SaveTaskbarThumbnail" -Value 1
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "IconsOnly" -Value 0
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "FontSmoothing" -Value 2
+    bcdedit /set useplatformclock No
+    bcdedit /set disabledynamictick No
     Start-Process "devmgmt.msc"
-    Start-Process "$env:windir\system32\SystemPropertiesPerformance.exe"
     Start-Process "msconfig"
     
     [System.Windows.Forms.MessageBox]::Show("Optimizacion al mango. Decime...no merezco un cafecito?")
@@ -52,19 +58,26 @@ function Optimizar-PC {
 
 # Función para Poner los updates en ON
 function Updates-On {
-        
+    # Habilitar los servicios para que se inicien automáticamente
+    Set-Service -Name UsoSvc -StartupType Automatic
+    Set-Service -Name wuauserv -StartupType Automatic
+    # Reiniciar los servicios
+    Start-Service -Name UsoSvc -Force
+    Start-Service -Name wuauserv -Force
     [System.Windows.Forms.MessageBox]::Show("Wiii!!! Volvieron los Updates!!! (?) ")
 }
 
-
-
 # Función para Poner los updates en OFF
 function Updates-Off {
-        
+        # Detener los servicios
+        Stop-Service -Name UsoSvc -Force
+        Stop-Service -Name wuauserv -Force
+        # Deshabilitar los servicios para que no se inicien automáticamente
+        Set-Service -Name UsoSvc -StartupType Disabled
+        Set-Service -Name wuauserv -StartupType Disabled
+
     [System.Windows.Forms.MessageBox]::Show("Y asi, como si nada, se fueron los updates...que dia triste :(")
 }
-
-
 
 # Función para mostrar las explicaciones
 function Mostrar-Explicaciones {
