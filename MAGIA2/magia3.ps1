@@ -165,29 +165,20 @@ function Confirmar-Accion {
 
     $soundPlayer = New-Object System.Media.SoundPlayer
     $soundPlayer.SoundLocation = "c:\repos\magia\magia2\nedry.wav"
-    $soundPlayer.Play()
+    $soundPlayer.Playlooping()
 
     # Mostrar la ventana de confirmación
     $formConfirmacion.ShowDialog()
-
-
-
+    $soundPlayer.Stop()
 }
-
+    
 # Función para confirmar antes de ejecutar la optimización
 function Updates-OnOff {
     # Crear nueva ventana para la confirmación
-    $formConfirmacion = New-Object System.Windows.Forms.Form
-    $formConfirmacion.Text = "Elegi que queres hacer"
-    $formConfirmacion.Size = New-Object System.Drawing.Size(500, 300)
-    $formConfirmacion.StartPosition = 'CenterScreen'
-
-    # Etiqueta de confirmación
-    $labelConfirmacion = New-Object System.Windows.Forms.Label
-    $labelConfirmacion.Text = "Choose your poison..."
-    $labelConfirmacion.Size = New-Object System.Drawing.Size(400, 50)
-    $labelConfirmacion.Location = New-Object System.Drawing.Point(50, 50)
-    $formConfirmacion.Controls.Add($labelConfirmacion)
+    $formUpdates = New-Object System.Windows.Forms.Form
+    $formUpdates.Text = "Elegi que queres hacer"
+    $formUpdates.Size = New-Object System.Drawing.Size(500, 300)
+    $formUpdates.StartPosition = 'CenterScreen'
 
     # Botón Activar Updates
     $btnOn = New-Object System.Windows.Forms.Button
@@ -207,9 +198,9 @@ function Updates-OnOff {
         $btnOptimizar.Visible = $true
         $btnExplicaciones.Visible = $true
         $btnSalir.Visible = $true
-        $formConfirmacion.Close()  # Cerrar ventana de confirmación
+        $formUpdates.Close()  # Cerrar ventana de confirmación
     })
-    $formConfirmacion.Controls.Add($btnOn)
+    $formUpdates.Controls.Add($btnOn)
 
     # Botón Desactivar Updates
     $btnOff = New-Object System.Windows.Forms.Button
@@ -229,12 +220,19 @@ function Updates-OnOff {
         $btnOptimizar.Visible = $true
         $btnExplicaciones.Visible = $true
         $btnSalir.Visible = $true
-        $formConfirmacion.Close()  # Cerrar ventana de confirmación
+        $formUpdates.Close()  # Cerrar ventana de confirmación
     })
-    $formConfirmacion.Controls.Add($btnOff)
+    $formUpdates.Controls.Add($btnOff)
+
+    $imagenmagia = New-Object System.Windows.Forms.PictureBox
+    $imagenmagia.Image = [System.Drawing.Image]::FromFile("c:\repos\magia\magia2\updates.jpg")
+    $imagenmagia.Size = $form.Size
+    $imagenmagia.SizeMode = "StretchImage"
+    $imagenmagia.Dock = "Fill"
+    $formUpdates.Controls.Add($imagenmagia)
 
     # Mostrar la ventana de confirmación
-    $formConfirmacion.ShowDialog()
+    $formUpdates.ShowDialog()
 }
 
 
