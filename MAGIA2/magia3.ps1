@@ -35,23 +35,23 @@ $form.MaximumSize = $form.Size
 
 # Función para ejecutar optimización
 function Optimizar-PC {
-    powercfg.exe /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-    Set-Service -Name 'SysMain' -StartupType Disabled
-    Set-Service -Name 'WSearch' -StartupType Disabled
-    Set-Service -Name 'DiagTrack' -StartupType Disabled
-    Set-Service -Name 'CDPSvc' -StartupType Disabled
-    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name 'AllowCortana' -Value 0
-    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name 'ConnectedSearchUseWeb' -Value 0
-    schtasks.exe /Change /DISABLE /TN "\Microsoft\Windows\Defrag\ScheduledDefrag"
-    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Value $performanceOptions["VisualFXSetting"]
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -Value $performanceOptions["UserPreferencesMask"]
-    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "SaveTaskbarThumbnail" -Value 1
-    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "IconsOnly" -Value 0
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "FontSmoothing" -Value 2
-    bcdedit /set useplatformclock No
-    bcdedit /set disabledynamictick No
-    Start-Process "devmgmt.msc"
-    Start-Process "msconfig"
+    powercfg.exe /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c #colocamos el perfil en maximo
+    Set-Service -Name 'SysMain' -StartupType Disabled #deshabilitamos SysMain
+    Set-Service -Name 'WSearch' -StartupType Disabled #deshabilitamos WSearch
+    Set-Service -Name 'DiagTrack' -StartupType Disabled #deshabilitamos DiagTrack
+    Set-Service -Name 'CDPSvc' -StartupType Disabled #deshabilitamos CDPSvc
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windos Search' -Name 'AllowCortana' -Value 0 #deshabilitamos Cortana
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name 'ConnectedSearchUseWeb' -Value 0 #deshabilitamos Windows Search
+    schtasks.exe /Change /DISABLE /TN "\Microsoft\Windows\Defrag\ScheduledDefrag" #deshabilitamos el defrag
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Value $performanceOptions["VisualFXSetting"] #deshabilitamos efectos visuales
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -Value $performanceOptions["UserPreferencesMask"] #idem anterir
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "SaveTaskbarThumbnail" -Value 1 #colocamos que se puedan ver la miniaturas
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "IconsOnly" -Value 0 #colocamos que se puedan ver los iconos 
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "FontSmoothing" -Value 2 #colocamos que se pueda ver linda las fuentes de texto
+    bcdedit /set useplatformclock No #que no use el temporizador interno
+    bcdedit /set disabledynamictick Yes #que no use el temporizador dinamico
+    Start-Process "devmgmt.msc" #abre el devicemanager
+    Start-Process "msconfig" #abre el msconfig
     
     [System.Windows.Forms.MessageBox]::Show("Optimizacion al mango. Decime...no merezco un cafecito?")
 }
@@ -85,15 +85,11 @@ function Mostrar-Explicaciones {
     $expForm.Text = "Explicaciones"
     $expForm.Size = New-Object System.Drawing.Size(250,200)
 
-    $pictureBox = New-Object System.Windows.Forms.PictureBox
-    $pictureBox.Image = [System.Drawing.Image]::FromFile("c:\repos\magia\magia2\nedry.gif")
-    $pictureBox.SizeMode = "StretchImage"
-    $pictureBox.Dock = "Fill"
-    $expForm.Controls.Add($pictureBox)
-
-    $soundPlayer = New-Object System.Media.SoundPlayer
-    $soundPlayer.SoundLocation = "c:\repos\magia\magia2\nedry.wav"
-    $soundPlayer.Play()
+    $imagenhelp = New-Object System.Windows.Forms.PictureBox
+    $imagenhelp.Image = [System.Drawing.Image]::FromFile("c:\repos\magia\magia2\raptor.jpg")
+    $imagenhelp.SizeMode = "StretchImage"
+    $imagenhelp.Dock = "Fill"
+    $expForm.Controls.Add($imagenhelp)
     
     $expForm.StartPosition = "Manual"
     $expForm.Location = New-Object System.Drawing.Point(0, 400)
@@ -118,16 +114,9 @@ function Mostrar-Explicaciones {
 function Confirmar-Accion {
     # Crear nueva ventana para la confirmación
     $formConfirmacion = New-Object System.Windows.Forms.Form
-    $formConfirmacion.Text = "Confirmacion de Accion"
+    $formConfirmacion.Text = "Estas Seguro?"
     $formConfirmacion.Size = New-Object System.Drawing.Size(500, 300)
     $formConfirmacion.StartPosition = 'CenterScreen'
-
-    # Etiqueta de confirmación
-    $labelConfirmacion = New-Object System.Windows.Forms.Label
-    $labelConfirmacion.Text = "ESTAS SEGURO?"
-    $labelConfirmacion.Size = New-Object System.Drawing.Size(400, 50)
-    $labelConfirmacion.Location = New-Object System.Drawing.Point(50, 50)
-    $formConfirmacion.Controls.Add($labelConfirmacion)
 
     # Botón NO
     $btnNo = New-Object System.Windows.Forms.Button
@@ -167,8 +156,22 @@ function Confirmar-Accion {
     })
     $formConfirmacion.Controls.Add($btnSi)
 
+    $imagenmagia = New-Object System.Windows.Forms.PictureBox
+    $imagenmagia.Image = [System.Drawing.Image]::FromFile("c:\repos\magia\magia2\nedry.gif")
+    $imagenmagia.Size = $form.Size
+    $imagenmagia.SizeMode = "StretchImage"
+    $imagenmagia.Dock = "Fill"
+    $formConfirmacion.Controls.Add($imagenmagia)
+
+    $soundPlayer = New-Object System.Media.SoundPlayer
+    $soundPlayer.SoundLocation = "c:\repos\magia\magia2\nedry.wav"
+    $soundPlayer.Play()
+
     # Mostrar la ventana de confirmación
     $formConfirmacion.ShowDialog()
+
+
+
 }
 
 # Función para confirmar antes de ejecutar la optimización
